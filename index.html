@@ -3,15 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CYBER STOCK 2077 V3.1</title>
+    <title>CYBER STOCK 2077 V3.2</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
-    <div class="matrix-rain"></div> <!-- 动态背景：矩阵雨 -->
+    <div class="matrix-rain"></div>
     <header>
         <h1>CYBER STOCK 2077</h1>
         <div class="loading">LOADING DATA STREAM... SYSTEM INIT... NEURAL LINK ESTABLISHED</div>
+        <button onclick="toggleTheme()" id="themeBtn">切换霓虹模式</button>
+        <button onclick="loadFromExcel()">从Excel刷新数据</button>
     </header>
 
     <nav class="tabs">
@@ -28,21 +31,32 @@
                 <div class="metric-card">SKU Count: <span id="skuCount">0</span></div>
                 <div class="metric-card">Categories: <span id="categories">0</span></div>
                 <div class="metric-card">Critical Low: <span id="criticalLow">0</span></div>
+                <div class="metric-card">警报计数: <span id="alertCount">0</span></div>
             </div>
-            <!-- 新增：低库存热力图看板 -->
+            <!-- 低库存热力图 -->
             <div class="dashboard-card">
                 <h3>低库存热力图 (Critical Heatmap)</h3>
                 <canvas id="heatmapChart"></canvas>
             </div>
-            <!-- 新增：库存趋势线图看板 -->
+            <!-- 库存趋势线图 -->
             <div class="dashboard-card">
                 <h3>库存趋势 (Trend Line)</h3>
                 <canvas id="trendChart"></canvas>
+            </div>
+            <!-- 新增：库存分布雷达图 -->
+            <div class="dashboard-card">
+                <h3>库存分布雷达 (Distribution Radar)</h3>
+                <canvas id="radarChart"></canvas>
             </div>
             <!-- 实时日志 -->
             <div class="dashboard-card">
                 <h3>REAL-TIME LOG MONITORING</h3>
                 <div id="logMonitor">SYSTEM ONLINE...</div>
+            </div>
+            <!-- 新增：3D旋转库存球 -->
+            <div class="dashboard-card">
+                <h3>3D库存球 (Stock Orb)</h3>
+                <div id="stockOrb" class="orb-container"></div>
             </div>
         </section>
 
@@ -56,10 +70,15 @@
                 </table>
                 <button onclick="exportCSV()">导出报告 (Export CSV)</button>
             </div>
-            <!-- 新增：3D库存堆叠图看板 -->
+            <!-- 分类占比堆叠图 -->
             <div class="dashboard-card">
                 <h3>分类占比 (Category Stack - 3D)</h3>
                 <canvas id="stackChart"></canvas>
+            </div>
+            <!-- 新增：预测热区图 -->
+            <div class="dashboard-card">
+                <h3>预测热区 (Prediction Heatzone)</h3>
+                <canvas id="heatzoneChart"></canvas>
             </div>
         </section>
 
@@ -67,7 +86,6 @@
         <section id="query" class="tab-content">
             <input type="text" id="searchInput" placeholder="搜索 Model/Spec/Qty..." oninput="filterInventory()">
             <div id="queryResults"></div>
-            <!-- 预测功能 -->
             <div class="dashboard-card">
                 <h3>库存预测 (Prediction)</h3>
                 <button onclick="predictStock()">生成预测</button>
