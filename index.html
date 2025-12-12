@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CYBER STOCK 2077 V3.4</title>
+    <title>CYBER STOCK 2077 V3.5</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -49,7 +49,6 @@
                 <h3>库存分布雷达 (Distribution Radar)</h3>
                 <canvas id="radarChart"></canvas>
             </div>
-            <!-- 新增：库存气泡图 -->
             <div class="dashboard-card">
                 <h3>库存气泡图 (Bubble Distribution)</h3>
                 <canvas id="bubbleChart"></canvas>
@@ -95,7 +94,6 @@
                 <button onclick="predictStock()">生成预测</button>
                 <div id="predictionOutput"></div>
             </div>
-            <!-- 调试日志区 -->
             <div class="dashboard-card" id="debugLog" style="display:none;">
                 <h3>调试日志 (Debug Console)</h3>
                 <div id="debugOutput"></div>
