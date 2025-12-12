@@ -1,59 +1,41 @@
-body {
-    background: linear-gradient(45deg, #0a0a0a, #1a0033);
-    color: #00ff41;
-    font-family: 'Courier New', monospace;
-    margin: 0; padding: 20px;
-    overflow-x: hidden;
-    transition: background 0.5s, color 0.5s; /* 主题切换 */
-}
+/* 原V3.3样式保持，添加以下 */
+#bubbleChart { animation: bubbleGlow 3s ease-in-out infinite alternate; }
+@keyframes bubbleGlow { from { filter: drop-shadow(0 0 5px #00ffff); } to { filter: drop-shadow(0 0 15px #00ffff); } }
 
+#debugLog { background: rgba(255,0,0,0.2); border-color: #ff0000; }
+#debugOutput { max-height: 200px; overflow-y: scroll; color: #ff0000; font-size: 0.8em; }
+
+/* 其他样式同V3.3 */
+body { background: linear-gradient(45deg, #0a0a0a, #1a0033); color: #00ff41; font-family: 'Courier New', monospace; margin: 0; padding: 20px; overflow-x: hidden; transition: background 0.5s, color 0.5s; }
 body.neon { background: linear-gradient(45deg, #ff00ff, #00ffff); color: #ff00ff; }
-
-.matrix-rain {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
-    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,255,65,0.03) 2px, rgba(0,255,65,0.03) 4px);
-    animation: rain 0.5s linear infinite;
-}
-
+.matrix-rain { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,255,65,0.03) 2px, rgba(0,255,65,0.03) 4px); animation: rain 0.5s linear infinite; }
 @keyframes rain { from { background-position: 0 0; } to { background-position: 0 100px; } }
-
 header { text-align: center; margin-bottom: 20px; }
 h1 { text-shadow: 0 0 10px #00ff41; animation: glow 2s ease-in-out infinite alternate; }
 @keyframes glow { from { text-shadow: 0 0 5px #00ff41; } to { text-shadow: 0 0 20px #00ff41; } }
-
 .loading { font-size: 0.8em; opacity: 0.7; animation: flicker 1s infinite; }
 @keyframes flicker { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
-
+.controls { margin: 10px 0; }
 button { background: #00ff41; color: #000; border: none; padding: 10px; cursor: pointer; box-shadow: 0 0 5px #00ff41; margin: 5px; }
-
+.progress { background: rgba(0,0,0,0.5); padding: 5px; margin: 10px 0; border: 1px solid #00ff41; }
+.error-popup { position: fixed; top: 20px; right: 20px; background: rgba(255,0,0,0.9); color: #fff; padding: 15px; border: 1px solid #ff0000; box-shadow: 0 0 20px #ff0000; z-index: 1000; animation: blink 1s infinite; }
+@keyframes blink { 50% { opacity: 0.5; } }
 .tabs { display: flex; justify-content: center; margin-bottom: 20px; }
 .tab-btn { background: transparent; border: 1px solid #00ff41; color: #00ff41; padding: 10px; margin: 0 5px; cursor: pointer; transition: all 0.3s; }
 .tab-btn.active, .tab-btn:hover { background: #00ff41; color: #000; box-shadow: 0 0 10px #00ff41; }
-
 .tab-content { display: none; }
 .tab-content.active { display: block; }
-
 .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 20px; }
 .metric-card { background: rgba(0,0,0,0.5); border: 1px solid #00ff41; padding: 10px; text-align: center; box-shadow: 0 0 5px #00ff41; animation: pulse 2s infinite; }
 @keyframes pulse { 0% { box-shadow: 0 0 5px #00ff41; } 50% { box-shadow: 0 0 15px #00ff41; } }
-
 .dashboard-card { background: rgba(0,0,0,0.7); border: 1px solid #ff00ff; margin-bottom: 20px; padding: 15px; box-shadow: 0 0 15px #ff00ff; }
 .dashboard-card h3 { color: #ff00ff; text-shadow: 0 0 5px #ff00ff; }
-
 table { width: 100%; border-collapse: collapse; }
 th, td { border: 1px solid #00ff41; padding: 8px; text-align: left; }
 th { background: #000; }
-
 input { background: #000; border: 1px solid #00ff41; color: #00ff41; padding: 10px; width: 100%; margin-bottom: 10px; }
-
 .critical-low { color: #ff0000; animation: blink 1s infinite; }
-@keyframes blink { 50% { opacity: 0.5; } }
-
-/* 3D Orb */
 .orb-container { width: 200px; height: 200px; perspective: 1000px; margin: 0 auto; }
-#stockOrb { width: 100%; height: 100%; background: radial-gradient(circle, #00ff41, #000); border-radius: 50%; transform-style: preserve-3d; animation: rotate 10s linear infinite, particle-explode 3s infinite; }
+#stockOrb { width: 100%; height: 100%; background: radial-gradient(circle, #00ff41, #000); border-radius: 50%; transform-style: preserve-3d; animation: rotate 10s linear infinite; }
 @keyframes rotate { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
-@keyframes particle-explode { 0%, 100% { box-shadow: 0 0 20px #00ff41; } 50% { box-shadow: 0 0 50px #00ff41, inset 0 0 20px #ff00ff; } }
-
-/* 响应式 */
 @media (max-width: 768px) { .metrics-grid { grid-template-columns: 1fr; } }
