@@ -1,134 +1,48 @@
-:root {
-  --bg-color: #050b14;     /* 深邃黑蓝 */
-  --card-bg: rgba(16, 24, 39, 0.7); /* 半透明玻璃 */
-  --primary: #00f3ff;      /* 赛博青 */
-  --accent: #bc13fe;       /* 霓虹紫 */
-  --warning: #ff003c;      /* 故障红 */
-  --text-main: #e0fbfc;
-  --text-dim: #557588;
-  --border-glow: 0 0 10px rgba(0, 243, 255, 0.3);
-  --font-tech: 'Segoe UI', 'Roboto', sans-serif;
+body {
+    background: linear-gradient(45deg, #0a0a0a, #1a0033); /* 深蓝紫渐变 */
+    color: #00ff41; /* 霓虹绿 */
+    font-family: 'Courier New', monospace;
+    margin: 0; padding: 20px;
+    overflow-x: hidden;
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-tech); }
-
-body { 
-  background-color: var(--bg-color); 
-  color: var(--text-main);
-  /* 赛博朋克网格背景 */
-  background-image: 
-    linear-gradient(rgba(0, 243, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
-  background-size: 40px 40px;
-  min-height: 100vh;
-  overflow-x: hidden;
+.matrix-rain {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,255,65,0.03) 2px, rgba(0,255,65,0.03) 4px);
+    animation: rain 0.5s linear infinite;
 }
 
-/* 顶部光效装饰 */
-body::before {
-  content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 3px;
-  background: linear-gradient(90deg, var(--primary), var(--accent), var(--primary));
-  z-index: 1000; box-shadow: 0 0 20px var(--primary);
-}
+@keyframes rain { from { background-position: 0 0; } to { background-position: 0 100px; } } /* 矩阵雨动画 */
 
-.container { max-width: 1800px; margin: 0 auto; padding: 30px; }
+header { text-align: center; margin-bottom: 20px; }
+h1 { text-shadow: 0 0 10px #00ff41; animation: glow 2s ease-in-out infinite alternate; }
+@keyframes glow { from { text-shadow: 0 0 5px #00ff41; } to { text-shadow: 0 0 20px #00ff41; } }
 
-/* 头部 */
-header { 
-  display: flex; justify-content: space-between; align-items: flex-end; 
-  margin-bottom: 40px; border-bottom: 1px solid rgba(0, 243, 255, 0.2); 
-  padding-bottom: 20px;
-}
-header h1 { 
-  font-size: 2.5rem; letter-spacing: 2px; text-transform: uppercase;
-  background: linear-gradient(to right, #fff, var(--primary));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 20px rgba(0, 243, 255, 0.5);
-}
-.update-badge {
-  color: var(--primary); font-family: monospace; border: 1px solid var(--primary);
-  padding: 5px 15px; background: rgba(0, 243, 255, 0.1); 
-  box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
-}
+.loading { font-size: 0.8em; opacity: 0.7; animation: flicker 1s infinite; }
+@keyframes flicker { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
 
-/* 选项卡 */
-.tabs { display: flex; gap: 15px; margin-bottom: 30px; }
-.tab { 
-  background: transparent; border: 1px solid var(--text-dim); color: var(--text-dim);
-  padding: 12px 30px; cursor: pointer; transition: 0.3s; clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
-}
-.tab:hover, .tab.active {
-  background: rgba(0, 243, 255, 0.1); border-color: var(--primary); color: var(--primary);
-  text-shadow: 0 0 8px var(--primary); box-shadow: inset 0 0 15px rgba(0, 243, 255, 0.1);
-}
+.tabs { display: flex; justify-content: center; margin-bottom: 20px; }
+.tab-btn { background: transparent; border: 1px solid #00ff41; color: #00ff41; padding: 10px; margin: 0 5px; cursor: pointer; transition: all 0.3s; }
+.tab-btn.active, .tab-btn:hover { background: #00ff41; color: #000; box-shadow: 0 0 10px #00ff41; }
 
-/* 卡片通用样式 */
-.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 30px; }
-.card {
-  background: var(--card-bg); border: 1px solid rgba(0, 243, 255, 0.1);
-  padding: 25px; position: relative; backdrop-filter: blur(5px);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
-}
-/* 卡片边角装饰 */
-.card::after {
-  content: ''; position: absolute; bottom: 0; right: 0; width: 20px; height: 20px;
-  border-bottom: 2px solid var(--primary); border-right: 2px solid var(--primary);
-}
+.tab-content { display: none; }
+.tab-content.active { display: block; }
 
-.card .label { color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem; }
-.card .num { font-size: 3rem; font-weight: bold; color: #fff; text-shadow: 0 0 15px rgba(255,255,255,0.3); margin-top: 10px; }
-.card.warning .num { color: var(--warning); text-shadow: 0 0 15px var(--warning); }
-.card .icon-bg { position: absolute; top: 10px; right: 15px; opacity: 0.2; color: var(--primary); transform: scale(1.5); }
+.metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 20px; }
+.metric-card { background: rgba(0,0,0,0.5); border: 1px solid #00ff41; padding: 10px; text-align: center; box-shadow: 0 0 5px #00ff41; }
 
-/* 图表区域 */
-.charts-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; margin-bottom: 30px; }
-.chart-box { background: var(--card-bg); border: 1px solid rgba(0, 243, 255, 0.1); padding: 20px; min-height: 450px; }
-.chart-box h3 { color: var(--primary); margin-bottom: 20px; border-left: 4px solid var(--accent); padding-left: 10px; }
-.chart-canvas { width: 100%; height: 380px; }
+.dashboard-card { background: rgba(0,0,0,0.7); border: 1px solid #ff00ff; margin-bottom: 20px; padding: 15px; box-shadow: 0 0 15px #ff00ff; }
+.dashboard-card h3 { color: #ff00ff; text-shadow: 0 0 5px #ff00ff; }
 
-/* 🔥 新功能：终端日志监控 */
-.terminal-box {
-  background: rgba(0, 0, 0, 0.6); border: 1px solid var(--text-dim);
-  padding: 15px; font-family: 'Courier New', monospace; height: 450px; overflow: hidden;
-  position: relative;
-}
-.terminal-header { color: var(--accent); border-bottom: 1px solid var(--text-dim); padding-bottom: 10px; margin-bottom: 10px; font-size: 0.9rem; }
-.terminal-content { height: 360px; overflow-y: hidden; }
-.log-item { 
-  padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.85rem; 
-  display: flex; justify-content: space-between;
-}
-.log-item .time { color: var(--text-dim); margin-right: 10px; }
-.log-item .msg { color: var(--warning); }
-.log-item.normal .msg { color: var(--primary); }
+table { width: 100%; border-collapse: collapse; }
+th, td { border: 1px solid #00ff41; padding: 8px; text-align: left; }
+th { background: #000; }
 
-/* 排行榜 & 表格 */
-.rank-item {
-  display: flex; align-items: center; background: rgba(255,255,255,0.03);
-  margin-bottom: 8px; padding: 15px; border-left: 3px solid transparent;
-  transition: 0.2s;
-}
-.rank-item:hover { background: rgba(0, 243, 255, 0.05); border-left-color: var(--primary); transform: translateX(5px); }
-.rank-num { font-size: 1.5rem; font-weight: bold; width: 60px; color: var(--text-dim); font-style: italic; }
-.rank-item:nth-child(1) .rank-num { color: #ffd700; text-shadow: 0 0 10px #ffd700; }
-.rank-item:nth-child(2) .rank-num { color: #e0e0e0; }
-.rank-item:nth-child(3) .rank-num { color: #cd7f32; }
+input { background: #000; border: 1px solid #00ff41; color: #00ff41; padding: 10px; width: 100%; margin-bottom: 10px; }
+button { background: #00ff41; color: #000; border: none; padding: 10px; cursor: pointer; box-shadow: 0 0 5px #00ff41; }
 
-.spec-info { flex: 1; display: flex; flex-direction: column; }
-.spec-main { font-size: 1.1rem; color: #fff; font-weight: bold; }
-.spec-sub { font-size: 0.9rem; color: var(--primary); opacity: 0.8; }
-.stock-val { font-size: 1.4rem; color: var(--primary); font-family: monospace; text-shadow: 0 0 5px var(--primary); }
-.stock-val.low { color: var(--warning); text-shadow: 0 0 5px var(--warning); }
-
-/* 输入框 */
-input, select {
-  background: rgba(0,0,0,0.5); border: 1px solid var(--primary); color: var(--primary);
-  padding: 12px; width: 100%; outline: none; box-shadow: inset 0 0 10px rgba(0, 243, 255, 0.1);
-}
-::placeholder { color: rgba(0, 243, 255, 0.3); }
+.critical-low { color: #ff0000; animation: blink 1s infinite; } /* 低库存闪烁 */
+@keyframes blink { 50% { opacity: 0.5; } }
 
 /* 响应式 */
-@media (max-width: 1000px) {
-  .charts-layout { grid-template-columns: 1fr; }
-  .terminal-box { height: 300px; margin-top: 20px; }
-}
+@media (max-width: 768px) { .metrics-grid { grid-template-columns: 1fr; } }
