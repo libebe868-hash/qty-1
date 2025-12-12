@@ -5,15 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>三诚库存看板</title>
   
-  <!-- 样式表：直接引用同目录下的文件 -->
+  <!-- 样式表 -->
   <link rel="stylesheet" href="style.css">
   
-  <!-- 图标库 (CDN) -->
+  <!-- 图标库 -->
   <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
   
-  <!-- 核心库：直接引用同目录下的文件 -->
-  <script src="xlsx.full.min.js"></script>
-  <script src="echarts.min.js"></script>
+  <!-- 🔴 重点修复：改回 CDN 链接，确保库能加载 -->
+  <!-- Excel 读取库 -->
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+  <!-- 图表库 -->
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
 </head>
 <body>
 
@@ -91,7 +93,6 @@
         <button id="exportBtn" class="btn-action"><i data-lucide="download"></i> 导出CSV</button>
       </div>
       
-      <!-- 列表标题头 -->
       <div class="table-header-custom">
         <span>排名</span>
         <span class="col-type">型号</span>
@@ -136,7 +137,6 @@
     </div>
   </div>
 
-  <!-- 业务逻辑脚本：直接引用同目录下的文件 -->
   <script src="script.js"></script>
 </body>
 </html>
