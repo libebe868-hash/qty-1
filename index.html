@@ -3,13 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>三诚螺纹护套库存看板</title>
-  <link rel="stylesheet" href="assets/style.css">
-  <!-- 图标库建议也本地化，这里暂时保留CDN -->
+  <title>三诚库存看板</title>
+  
+  <!-- 样式表：直接引用同目录下的文件 -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- 图标库 (CDN) -->
   <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
-  <!-- 核心库改为本地引用，极大提升国内加载速度 -->
-  <script src="assets/xlsx.full.min.js"></script>
-  <script src="assets/echarts.min.js"></script>
+  
+  <!-- 核心库：直接引用同目录下的文件 -->
+  <script src="xlsx.full.min.js"></script>
+  <script src="echarts.min.js"></script>
 </head>
 <body>
 
@@ -24,9 +28,6 @@
       <div class="header-left">
         <h1><i data-lucide="package-search"></i> 三诚库存看板</h1>
         <div class="update-badge" id="updateTime">检查更新中...</div>
-      </div>
-      <div class="header-right">
-        <!-- 可以在这里加个联系方式或Logo -->
       </div>
     </header>
 
@@ -89,21 +90,24 @@
         </div>
         <button id="exportBtn" class="btn-action"><i data-lucide="download"></i> 导出CSV</button>
       </div>
+      
+      <!-- 列表标题头 -->
       <div class="table-header-custom">
         <span>排名</span>
-        <span>型号</span>
-        <span>规格</span>
-        <span>材质</span>
+        <span class="col-type">型号</span>
+        <span class="col-spec">规格</span>
+        <span class="col-mat">材质</span>
         <span>库存</span>
       </div>
+      
       <div id="rankingList" class="ranking-list"></div>
     </div>
 
     <!-- 3. 明细查询面板 -->
     <div id="detail" class="panel">
-      <div class="filter-row">
+      <div class="filter-row" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
         <select id="sheetSelect"></select>
-        <span class="count-badge">共 <span id="itemCount">0</span> 条</span>
+        <span class="count-badge" style="color: #94a3b8; font-size: 0.9em;">共 <span id="itemCount">0</span> 条</span>
       </div>
       
       <div class="search-area">
@@ -132,6 +136,7 @@
     </div>
   </div>
 
-  <script src="assets/script.js"></script>
+  <!-- 业务逻辑脚本：直接引用同目录下的文件 -->
+  <script src="script.js"></script>
 </body>
 </html>
