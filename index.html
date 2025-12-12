@@ -2,133 +2,86 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>三诚库存看板</title>
-  
-  <!-- 样式表 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CYBER STOCK 2077</title>
   <link rel="stylesheet" href="style.css">
-  
-  <!-- 图标库 -->
   <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
-  
-  <!-- 🔴 重点修复：改回 CDN 链接，确保库能加载 -->
-  <!-- Excel 读取库 -->
+  <!-- 保持CDN引用以确保稳定 -->
   <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
-  <!-- 图表库 -->
   <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
 </head>
 <body>
 
-  <!-- 加载动画层 -->
-  <div id="loadingLayer">
-    <div class="loader"></div>
-    <div class="loading-text">正在同步最新库存数据...</div>
+  <div id="loadingLayer" style="position:fixed;inset:0;background:#000;z-index:9999;display:flex;justify-content:center;align-items:center;color:#00f3ff">
+    LOADING DATA STREAM...
   </div>
 
   <div class="container">
     <header>
-      <div class="header-left">
-        <h1><i data-lucide="package-search"></i> 三诚库存看板</h1>
-        <div class="update-badge" id="updateTime">检查更新中...</div>
-      </div>
+      <h1><i data-lucide="cpu"></i> 三诚库存监控系统 <span style="font-size:0.4em;vertical-align:top">V3.0</span></h1>
+      <div class="update-badge" id="updateTime">SYSTEM INIT...</div>
     </header>
 
-    <!-- 导航栏 -->
     <div class="tabs">
-      <button class="tab active" data-tab="overview">
-        <i data-lucide="layout-dashboard"></i> 总览大屏
-      </button>
-      <button class="tab" data-tab="ranking">
-        <i data-lucide="trophy"></i> 库存排行
-      </button>
-      <button class="tab" data-tab="detail">
-        <i data-lucide="search"></i> 明细查询
-      </button>
+      <button class="tab active" data-tab="overview">总览控制台</button>
+      <button class="tab" data-tab="ranking">物资排行</button>
+      <button class="tab" data-tab="detail">深度查询</button>
     </div>
 
-    <!-- 1. 总览面板 -->
+    <!-- 面板 1: 总览 (布局改动) -->
     <div id="overview" class="panel active">
       <div class="grid">
-        <div class="card total">
-          <div class="icon-bg"><i data-lucide="boxes"></i></div>
-          <div class="num" id="totalStock">0</div>
-          <div class="label">总库存件数</div>
-        </div>
-        <div class="card total">
-          <div class="icon-bg"><i data-lucide="file-spreadsheet"></i></div>
-          <div class="num" id="totalItems">0</div>
-          <div class="label">总SKU数</div>
-        </div>
-        <div class="card total">
-          <div class="icon-bg"><i data-lucide="tags"></i></div>
-          <div class="num" id="totalTypes">0</div>
-          <div class="label">总型号数</div>
-        </div>
-        <div class="card total warning">
-          <div class="icon-bg"><i data-lucide="alert-triangle"></i></div>
-          <div class="num" id="lowStockCount">0</div>
-          <div class="label">低库存预警</div>
-        </div>
+        <div class="card"><div class="label">Total Stock</div><div class="num" id="totalStock">0</div><i data-lucide="package" class="icon-bg"></i></div>
+        <div class="card"><div class="label">SKU Count</div><div class="num" id="totalItems">0</div><i data-lucide="grid" class="icon-bg"></i></div>
+        <div class="card"><div class="label">Categories</div><div class="num" id="totalTypes">0</div><i data-lucide="layers" class="icon-bg"></i></div>
+        <div class="card warning"><div class="label">Critical Low</div><div class="num" id="lowStockCount">0</div><i data-lucide="alert-octagon" class="icon-bg"></i></div>
       </div>
-      
-      <div class="charts-container">
-        <div class="chart-box">
-          <h3><i data-lucide="pie-chart"></i> 各型号库存占比</h3>
-          <div id="pieChart" class="chart-canvas"></div>
+
+      <!-- 新布局：图表 + 监控终端 -->
+      <div class="charts-layout">
+        <div>
+           <div class="chart-box" style="margin-bottom:20px">
+             <h3>库存 Top 15 (Model + Spec)</h3>
+             <div id="barChart" class="chart-canvas"></div>
+           </div>
+           <div class="chart-box">
+             <h3>分类占比分析</h3>
+             <div id="pieChart" class="chart-canvas"></div>
+           </div>
         </div>
-        <div class="chart-box">
-          <h3><i data-lucide="bar-chart-2"></i> 库存 Top 15 规格</h3>
-          <div id="barChart" class="chart-canvas"></div>
+        
+        <!-- 新功能：右侧实时日志 -->
+        <div class="terminal-box">
+          <div class="terminal-header">> REAL-TIME LOG MONITORING_</div>
+          <div id="terminalContent" class="terminal-content">
+            <!-- JS 自动填充日志 -->
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- 2. 排行榜面板 -->
+    <!-- 面板 2: 排行 (保持结构，样式已变) -->
     <div id="ranking" class="panel">
-      <div class="search-area">
-        <div class="input-wrapper">
-          <i data-lucide="search" class="search-icon"></i>
-          <input type="text" id="searchInput" placeholder="全局搜索：型号 / 规格 / 材质 (支持空格多词搜索)">
-        </div>
-        <button id="exportBtn" class="btn-action"><i data-lucide="download"></i> 导出CSV</button>
+      <div style="margin-bottom:20px">
+        <input type="text" id="searchInput" placeholder="Search Database... (Model / Spec)">
       </div>
-      
-      <div class="table-header-custom">
-        <span>排名</span>
-        <span class="col-type">型号</span>
-        <span class="col-spec">规格</span>
-        <span class="col-mat">材质</span>
-        <span>库存</span>
-      </div>
-      
-      <div id="rankingList" class="ranking-list"></div>
+      <div id="rankingList"></div>
     </div>
 
-    <!-- 3. 明细查询面板 -->
+    <!-- 面板 3: 明细 -->
     <div id="detail" class="panel">
-      <div class="filter-row" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
-        <select id="sheetSelect"></select>
-        <span class="count-badge" style="color: #94a3b8; font-size: 0.9em;">共 <span id="itemCount">0</span> 条</span>
+      <div style="margin-bottom:20px; display:flex; gap:10px">
+        <select id="sheetSelect" style="flex:1"></select>
+        <span style="color:var(--primary); align-self:center; font-family:monospace" id="itemCount">0</span>
       </div>
-      
-      <div class="search-area">
-        <div class="input-wrapper">
-          <i data-lucide="filter" class="search-icon"></i>
-          <input type="text" id="detailSearch" placeholder="在此型号内筛选...">
-        </div>
-        <button id="detailExportBtn" class="btn-action secondary"><i data-lucide="file-down"></i> 导出当前</button>
+      <div style="margin-bottom:20px">
+        <input type="text" id="detailSearch" placeholder="Filter current list...">
       </div>
-
-      <div class="table-container">
-        <table id="detailTable">
+      <div style="overflow-x:auto">
+        <table id="detailTable" style="width:100%; border-collapse:collapse; color:#aaa">
           <thead>
-            <tr>
-              <th>序号</th>
-              <th>型号</th>
-              <th>规格</th>
-              <th>材质</th>
-              <th>库存</th>
-              <th>单位</th>
+            <tr style="text-align:left; border-bottom:1px solid var(--primary); color:var(--primary)">
+              <th style="padding:10px">ID</th><th>Model</th><th>Spec</th><th>Mat</th><th>Qty</th><th>Unit</th>
             </tr>
           </thead>
           <tbody></tbody>
